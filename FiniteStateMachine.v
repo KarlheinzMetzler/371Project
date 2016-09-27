@@ -41,42 +41,173 @@ end
 always @ ( * ) begin
   case (CurrentState)
     StateInitial:
-    begin
-                                              //TODO Something
-    end
+      begin
+        if (key_press && (Operator == 3'b100)) NextState = StateOpA;
+      end
     StateOpA:
-    begin
+      begin
                                               //TODO Something
-    end
+        if(key_press && (Operator != 3'b100)) NextState = StateOperator;
+
+      end
     StateOperator:
-    begin
+      begin
                                               //TODO Something
-    end
+        if(key_press && (value >= 2'h9)) NextState = StateOpB
+      end
     StateOpB:
-    begin
+      begin
                                               //TODO Something
-    end
+        if (Execute == 1) NextState = StateResult;
+      end
     StateResult:
-    begin
+      begin
                                               //TODO Something
-    end
-    
+        if (Clear == 1) NextState = StateInitial;
+      end
+
     StateHold0:
-    begin
-    NextState = StateInitial;                 // Place Holder transitions
-    end
+      begin
+        NextState = StateInitial;                 // Place Holder transitions
+      end
     StateHold1:
-    begin
-    NextState = StateInitial;
-    end
+      begin
+        NextState = StateInitial;
+      end
     StateHold2:
-    begin
-    NextState = StateInitial;
-    end
+      begin
+        NextState = StateInitial;
+      end
     default:   NextState = CurrentState;
+
   endcase
 end
 
+// ------------- Operations
+// TODO create state outputs (Case statement)
+
+// Reading in from the keypad
+clk_div c1(CLOCK_50, 1, clk_500);
+
+colFunction c60(clk_500, {GPIO_0[10], GPIO_0[12], GPIO_0[14], GPIO_0[16]}, cols);
+
+keypad k1(clk_500, {GPIO_0[18], GPIO_0[20], GPIO_0[22], GPIO_0[24]}, cols, value, key_press);
+
+// Creating enables and varying operations
+reg key_press1;
+	always@(posedge clk_500)
+	begin
+		Sign[0] <= SW[16];
+		Sign[1] <= SW[17];   // Change so its separate for A and B
+
+		//----------- Value A enable --------------
+		if(key_press == 0)
+			begin
+			key_press1 <= key_press;
+			Enable[0] = 0;
+			end
+		else
+			if(key_press > key_press1)
+				begin
+				key_press1 <= key_press;
+				Enable[0] = 1;
+				end
+			else
+				begin
+				key_press1 <= key_press;
+				Enable[0] = 0;
+				end
+
+		//----------- Value B enable --------------
+		if(key_press == 0)
+			begin
+			key_press1 <= key_press;
+			Enable[1] = 0;
+			end
+		else
+			if(key_press > key_press1)
+				begin
+				key_press1 <= key_press;
+				Enable[1] = 1;
+				end
+			else
+				begin
+				key_press1 <= key_press;
+				Enable[1] = 0;
+				end
+		//----------- Operator enable --------------
+
+		if (value == 4'hF)
+			Operator <= 3'b000;				// Addition
+		else if (value == 4'hE)
+			Operator <= 3'b001;				// Subtraction
+		else if (value == 4'hD)
+			Operator <= 3'b010;				// Multiplication
+		else if (value == 4'hC)
+			Operator <= 3'b011;				// Division
+		else
+			Operator <= 3'b100;				// No operator press
+
+		//----------- Clear enable --------------
+		if (value == 4'hA)
+			Clear <= 1;				// Clear On
+		else
+			Clear <= 0;				// Clear Off
+
+			//----------- Execute enable --------------
+		if (value == 4'hB)
+			Execute <= 1;				// Execute On
+		else
+			Execute <= 0;				// Execute Off
+
+	end
+
+// Creating specific state operations
+always @ ( posedge clk ) begin
+case (CurrentState)
+  StateInitial:
+    begin
+      // Initialising all values as 0
+      ValueA = 0;
+      ValueB = 0;
+      Clear = 0;
+      Execute = 0;
+      Operator = 0;
+      // TODO set the hex encoder value to zero and negative signal
+    end
+  StateOpA:
+    begin
+      if (clear == 0)
+        begin
+          shiftReg sA(value, clk_500, ValueA, Enable[0]);
+        end
+      else
+        begin
+          ValueA = 0;
+        end
+    hexEncoder hA1(ValueA[3:0], HEX6);
+    hexEncoder hA2(ValueA[7:4], HEX7);
+    // TODO indicate negative??
+    end
+  StateOperator:
+    begin
+
+
+    end
+  StateOpB:
+    begin
+
+
+    end
+  StateResult:
+    begin
+
+
+    end
+  endcase
+
+
+end
 
 
 endmodule // FiniteStateMachine
