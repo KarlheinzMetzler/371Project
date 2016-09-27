@@ -1,11 +1,17 @@
 module FiniteStateMachine (
 
 // -----------  Inputs
-  input ;
-
+  input         CLOCK_50,       //50Mhz Clock
+  inout[24:10]  GPIO_0;         //Input Output Keypad pins
 // -----------  Outputs
-  output reg [8:0] OperandA,
-             [8:0] OperandB;
+  output[7:0]   HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, HEX6, HEX7, //HEX displays
+  output[17:0]  LEDR,           //Output Red LEDs
+
+// ----------- Internal Connections
+  reg [8:0]   OperandA, OperandB; //Math Operands
+  wire clk_500, key_press;        //Clk and key press indicator
+  wire
+
 
   );
 
