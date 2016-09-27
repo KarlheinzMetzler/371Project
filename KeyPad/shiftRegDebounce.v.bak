@@ -1,0 +1,12 @@
+module shiftReg (Reset, Enable, SerialIn, Clock, Equal);
+	input = Reset, Enable, Clock;
+	input = [3:0] SerialIn;
+	output = Equal;
+	
+	always@(posedge Clock)
+	begin
+	
+	end
+	
+	endmodule
+	

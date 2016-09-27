@@ -1,0 +1,43 @@
+module keypad (clk, row, col, value, no_key_press);
+	input clk;
+	input [0:3]row;
+	input [0:1]col;
+	output reg [3:0]value;
+	output reg no_key_press;
+	
+//	//Check if any key is pressed, NOTE: not working yet
+//	always@(posedge clk)
+//	begin
+//		if (row == 4'b1111)
+//			no_key_press = 1;
+//		else
+//			no_key_press = 0;
+//	end
+
+	always@(posedge clk)
+	begin
+		case({col,row})
+			6'b001000: value = 4'h1;
+			6'b011000: value = 4'h2;
+			6'b101000: value = 4'h3;
+			6'b111000: value = 4'hF;
+			
+			6'b000100: value = 4'h4;
+			6'b010100: value = 4'h5;
+			6'b100100: value = 4'h6;
+			6'b110100: value = 4'hE;
+			
+			6'b000010: value = 4'h7;
+			6'b010010: value = 4'h8;
+			6'b100010: value = 4'h9;
+			6'b110010: value = 4'hD;
+			
+			6'b000001: value = 4'hA;
+			6'b010001: value = 4'h0;
+			6'b100001: value = 4'hB;
+			6'b110001: value = 4'hC;
+			endcase
+	end
+
+
+endmodule

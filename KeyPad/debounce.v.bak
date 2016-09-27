@@ -1,0 +1,27 @@
+module debounce (CLOCK_50, Button, ButtonState);
+
+input CLOCK_50;
+input Button;
+output reg ButtonState;
+
+// Initialise ButttonSync to be an active high veriosn of the button
+reg ButtonSync;
+always@(posedge CLOCK_50)
+ButtonSync <= ~Button;
+
+reg ButtonSync1;
+always@(posedge CLOCK_50)
+ButtonSync1<=ButtonSync;
+
+// After a specific amount of time if the button has changed state then set then change the state
+reg [15:0]ButtonCount;
+always@(posedge CLOCK_50)
+if(ButtonState == ButtonSync1)
+	ButtonCount <= 0;
+else 
+begin
+	ButtonCount <= ButtonCount + 1'b1;
+	if(ButtonCount == 16'd3000)
+		ButtonState <= ~ButtonState;
+end
+endmodule

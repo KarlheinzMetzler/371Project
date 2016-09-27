@@ -1,0 +1,18 @@
+module MECHENG371_Project (KEY, CLOCK_27, debounce);
+
+input KEY, CLOCK_27;
+output debounce;
+
+reg [7:0] reg;
+
+always @ (posedge CLOCK_27)
+begin
+reg[7:0] <= {reg[6:0], KEY[1]};
+if(reg[7:0] == 8'b00000000)
+	deboune <= 1'b0;
+else if(reg[7:0] == 8'b11111111)
+	debounce <= 1'b1;
+else debounce <= debounce;
+
+end
+endmodule

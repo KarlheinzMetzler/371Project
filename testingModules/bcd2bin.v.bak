@@ -1,0 +1,20 @@
+module bcd2bin(neg, tens, ones, binary);
+
+	input neg;
+	input [3:0] tens, ones;
+	output reg [7:0]binary;
+	
+	
+	always@(binary)
+	begin
+		if(ones < 4'b1010) 		//If lower number is less than 10
+		begin
+			if(tens == 4'b0000) 	//if tens is = 0
+				binary = ones;		//set output to ones
+			if((tens[3:1]== 3'b000)&&(tens[0]== 1'b1))
+				binary == ones + 4'b1010;
+		end
+		else
+			binary = {4{1'bx}}
+	end
+endmodule

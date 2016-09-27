@@ -1,0 +1,26 @@
+module subtract(X, Y, Res, neg);
+// This module performs X - Y
+	parameter n = 4; //n Bits for subtraction
+	input[n-1:0]X,Y;
+	output reg[n-1:0]S;
+	output reg neg;
+	reg[n:0] Subtract, twosComp;
+	reg carry;
+	
+	
+	always@(X,Y)
+	begin
+		twosComp = ~Y + 1'b1;
+		Subtract = {1'b0,X} + {1'b0,twosComp};
+		carry = Subtract[n];
+		
+		if(carry == 1'b0)
+			neg = 1'b1;
+			Res = ~Subtract[n-1:0] + 1'b1;
+		else
+		Res = Subtract[n-1:0];
+		
+	end
+	
+	endmodule
+	
