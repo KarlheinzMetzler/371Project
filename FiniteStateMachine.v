@@ -30,7 +30,46 @@ always @ ( posedge clk ) begin
   else CurrentState <= NextState;
 end
 
+// ---------------- Conditional state transitions
 
+always @ ( * ) begin
+  case (CurrentState)
+    StateInitial:
+    begin
+                                              //TODO Something
+    end
+    StateOpA:
+    begin
+                                              //TODO Something
+    end
+    StateOperator:
+    begin
+                                              //TODO Something
+    end
+    StateOpB:
+    begin
+                                              //TODO Something
+    end
+    StateResult:
+    begin
+                                              //TODO Something
+    end
+    
+    StateHold0:
+    begin
+    NextState = StateInitial;                 // Place Holder transitions
+    end
+    StateHold1:
+    begin
+    NextState = StateInitial;
+    end
+    StateHold2:
+    begin
+    NextState = StateInitial;
+    end
+    default:   NextState = CurrentState;
+  endcase
+end
 
 
 
