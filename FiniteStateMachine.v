@@ -5,12 +5,14 @@ module FiniteStateMachine (
   inout[24:10]  GPIO_0;         //Input Output Keypad pins
 // -----------  Outputs
   output[7:0]   HEX0, HEX1, HEX2, HEX3, HEX4, HEX5, HEX6, HEX7, //HEX displays
-  output[17:0]  LEDR,           //Output Red LEDs
+  output[17:0]  LEDR;           //Output Red LEDs
 
 // ----------- Internal Connections
-  reg [8:0]   OperandA, OperandB; //Math Operands
-  wire clk_500, key_press;        //Clk and key press indicator
-  wire
+  reg [8:0]   OperandA, OperandB, //Math Operands
+  reg
+  wire clk_500, key_press,       //Clk and key press indicator
+  wire[3:0]   value,
+  wire[0:1]   cols
 
 
   );
@@ -60,7 +62,7 @@ always @ ( * ) begin
     begin
                                               //TODO Something
     end
-    
+
     StateHold0:
     begin
     NextState = StateInitial;                 // Place Holder transitions
